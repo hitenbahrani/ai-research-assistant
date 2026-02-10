@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  color: #e6eef7;
+  background: #020b18;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-shell {
+  background:
+    radial-gradient(1200px 650px at 82% 12%, rgba(25, 171, 226, 0.2), transparent 58%),
+    radial-gradient(900px 700px at 62% 75%, rgba(43, 118, 255, 0.12), transparent 62%),
+    linear-gradient(180deg, #020912 0%, #010710 100%);
+}
+
+.workspace-bg {
+  background:
+    radial-gradient(900px 560px at 70% 16%, rgba(18, 101, 186, 0.22), transparent 62%),
+    radial-gradient(900px 580px at 72% 84%, rgba(31, 168, 182, 0.18), transparent 66%),
+    linear-gradient(180deg, #03112a 0%, #010c1f 66%, #021123 100%);
+}
+
+p {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0.5rem 0;
+  padding-left: 1.2rem;
+}
