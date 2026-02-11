@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Optional
 import threading
+import os
 
 from llama_cpp import Llama
 
@@ -12,7 +13,7 @@ _llm: Optional[Llama] = None
 _lock = threading.Lock()
 
 N_CTX = 8192
-N_GPU_LAYERS = 1
+N_GPU_LAYERS = int(os.getenv("N_GPU_LAYERS", "0"))
 N_THREADS = None
 
 BASE_SYSTEM_PROMPT = """You are Nova, a precise and useful AI assistant.

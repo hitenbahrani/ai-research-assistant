@@ -2,4 +2,4 @@ fastapi
 uvicorn[standard]
 pydantic
 llama-cpp-python
-duckduckgo-search
+ddgs

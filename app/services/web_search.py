@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
-from duckduckgo_search import DDGS
+try:
+    from ddgs import DDGS
+except ImportError:  # Backward compatibility if ddgs is not installed yet.
+    from duckduckgo_search import DDGS
 
 from app.config import MAX_WEB_CHARS, WEB_TIMEOUT_SECONDS, WEB_TOP_K
 
