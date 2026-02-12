@@ -1,5 +1,13 @@
 ## Nova Nexus AI
 
+## 🚀 Live Demo
+
+You can experience the project here:
+
+👉 https://ai-research-assistant-web.vercel.app
+
+No installation required.
+
 **Nova Nexus AI** is a full-stack AI research assistant platform built for fast, reliable, thread-based conversations with optional live web grounding.
 
 It combines a premium chat workspace UI, a FastAPI orchestration backend, and a local GGUF LLM runtime to deliver practical AI workflows for research, comparison, planning, and ideation.
