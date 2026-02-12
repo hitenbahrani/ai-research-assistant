@@ -2,19 +2,27 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from typing import Optional
-import threading
 import os
 
-from llama_cpp import Llama
+from groq import Groq
 
-from app.config import LLM_MODEL_PATH
 
-_llm: Optional[Llama] = None
-_lock = threading.Lock()
+# ==========================
+# GROQ CONFIGURATION
+# ==========================
 
-N_CTX = 8192
-N_GPU_LAYERS = int(os.getenv("N_GPU_LAYERS", "0"))
-N_THREADS = None
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+
+if not GROQ_API_KEY:
+    raise RuntimeError("GROQ_API_KEY environment variable not set.")
+
+client = Groq(api_key=GROQ_API_KEY)
+
+
+# ==========================
+# SYSTEM PROMPTS
+# ==========================
 
 BASE_SYSTEM_PROMPT = """You are Nova, a precise and useful AI assistant.
 
@@ -35,21 +43,9 @@ Grounding rules:
 """
 
 
-def load_llm() -> Llama:
-    global _llm
-    with _lock:
-        if _llm is None:
-            print("Loading LLM...")
-            _llm = Llama(
-                model_path=str(LLM_MODEL_PATH),
-                n_ctx=N_CTX,
-                n_gpu_layers=N_GPU_LAYERS,
-                n_threads=N_THREADS,
-                verbose=False,
-            )
-            print("LLM loaded")
-    return _llm
-
+# ==========================
+# HISTORY CLEANING
+# ==========================
 
 def _to_history_messages(history: list[dict]) -> list[dict]:
     cleaned: list[dict] = []
@@ -62,13 +58,16 @@ def _to_history_messages(history: list[dict]) -> list[dict]:
     return cleaned[-10:]
 
 
+# ==========================
+# MAIN GENERATION FUNCTION
+# ==========================
+
 def generate_answer(
     user_message: str,
     context: str = "",
     history: Optional[list[dict]] = None,
     strict_grounding: bool = False,
 ) -> str:
-    llm = load_llm()
 
     messages: list[dict] = [
         {
@@ -95,11 +94,11 @@ def generate_answer(
 
     messages.append({"role": "user", "content": user_message.strip()})
 
-    result = llm.create_chat_completion(
+    response = client.chat.completions.create(
+        model=GROQ_MODEL,
         messages=messages,
         temperature=0.25 if strict_grounding else 0.45,
-        top_p=0.9,
         max_tokens=900,
     )
 
-    return result["choices"][0]["message"]["content"].strip()
+    return response.choices[0].message.content.strip()
